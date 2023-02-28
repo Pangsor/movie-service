@@ -6,6 +6,7 @@ import com.walatech.movieservice.service.MovieService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,5 +24,10 @@ public class MovieServiceImpl implements MovieService {
     public Movie getMovieById(int movieId) {
         Optional<Movie> optionalMovie = movieRepository.findById(movieId);
         return optionalMovie.get();
+    }
+
+    @Override
+    public List<Movie> getAllMovies() {
+        return movieRepository.findAll();
     }
 }
