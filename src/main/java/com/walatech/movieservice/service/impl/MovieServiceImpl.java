@@ -30,4 +30,15 @@ public class MovieServiceImpl implements MovieService {
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
+
+    @Override
+    public Movie updateMovie(Movie movie) {
+        Movie existingMovie = movieRepository.findById(movie.getId()).get();
+        existingMovie.setTitle(movie.getTitle());
+        existingMovie.setDescription(movie.getDescription());
+        existingMovie.setRating(movie.getRating());
+        existingMovie.setImage(movie.getImage());
+        Movie updatedMovie = movieRepository.save(existingMovie);
+        return updatedMovie;
+    }
 }

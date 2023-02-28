@@ -33,4 +33,12 @@ public class MovieController {
         List<Movie> movieList = movieService.getAllMovies();
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Movie> updateMovie(@PathVariable("id") int movieId,
+                                             @RequestBody Movie movie){
+        movie.setId(movieId);
+        Movie updatedMovie = movieService.updateMovie(movie);
+        return new ResponseEntity<>(updatedMovie, HttpStatus.OK);
+    }
 }
