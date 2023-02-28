@@ -4,10 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -19,7 +23,7 @@ public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -28,16 +32,16 @@ public class Movie {
     private String description;
 
     @Column(name = "rating", nullable = false)
-    private int rating;
+    private float rating;
 
-    @Column(name = "image", nullable = false)
+    @Column(name = "image")
     private String image;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    @CreatedDate
-    private long createdAt;
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false,updatable = false)
+    public Date createdAt;
 
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private long updatedAt;
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    public Date updatedAt;
 }
