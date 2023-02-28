@@ -5,10 +5,7 @@ import com.walatech.movieservice.service.MovieService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -21,5 +18,11 @@ public class MovieController {
     public ResponseEntity<Movie> createMovie(@RequestBody Movie movie){
         Movie savedMovie = movieService.createMovie(movie);
         return new ResponseEntity<>(savedMovie, HttpStatus.CREATED);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Movie> getMovieById(@PathVariable("id") int movieId){
+        Movie movie = movieService.getMovieById(movieId);
+        return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 }
