@@ -1,5 +1,6 @@
 package com.walatech.movieservice.controller;
 
+import com.walatech.movieservice.dto.MovieDto;
 import com.walatech.movieservice.entity.Movie;
 import com.walatech.movieservice.service.MovieService;
 import lombok.AllArgsConstructor;
@@ -17,8 +18,8 @@ public class MovieController {
     private MovieService movieService;
 
     @PostMapping
-    public ResponseEntity<Movie> createMovie(@RequestBody Movie movie){
-        Movie savedMovie = movieService.createMovie(movie);
+    public ResponseEntity<MovieDto> createMovie(@RequestBody MovieDto movie){
+        MovieDto savedMovie = movieService.createMovie(movie);
         return new ResponseEntity<>(savedMovie, HttpStatus.CREATED);
     }
 
@@ -40,5 +41,11 @@ public class MovieController {
         movie.setId(movieId);
         Movie updatedMovie = movieService.updateMovie(movie);
         return new ResponseEntity<>(updatedMovie, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteMovie(@PathVariable("id") int movieId){
+        movieService.deleteMovie(movieId);
+        return new ResponseEntity<>("Movie successfully deleted",HttpStatus.OK);
     }
 }

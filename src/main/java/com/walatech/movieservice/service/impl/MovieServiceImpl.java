@@ -1,5 +1,6 @@
 package com.walatech.movieservice.service.impl;
 
+import com.walatech.movieservice.dto.MovieDto;
 import com.walatech.movieservice.entity.Movie;
 import com.walatech.movieservice.repository.MovieRepository;
 import com.walatech.movieservice.service.MovieService;
@@ -16,8 +17,28 @@ public class MovieServiceImpl implements MovieService {
     private MovieRepository movieRepository;
 
     @Override
-    public Movie createMovie(Movie movie) {
-        return movieRepository.save(movie);
+    public MovieDto createMovie(MovieDto movieDto) {
+        Movie movie = new Movie(
+                movieDto.getId(),
+                movieDto.getTitle(),
+                movieDto.getDescription(),
+                movieDto.getRating(),
+                movieDto.getImage(),
+                movieDto.getCreatedAt(),
+                movieDto.getUpdatedAt()
+        );
+        Movie savedMovie = movieRepository.save(movie);
+
+        MovieDto savedMovieDto = new MovieDto(
+                savedMovie.getId(),
+                savedMovie.getTitle(),
+                savedMovie.getDescription(),
+                savedMovie.getRating(),
+                savedMovie.getImage(),
+                savedMovie.getCreatedAt(),
+                savedMovie.getUpdatedAt()
+        );
+        return savedMovieDto;
     }
 
     @Override
@@ -40,5 +61,10 @@ public class MovieServiceImpl implements MovieService {
         existingMovie.setImage(movie.getImage());
         Movie updatedMovie = movieRepository.save(existingMovie);
         return updatedMovie;
+    }
+
+    @Override
+    public void deleteMovie(int movieId) {
+        movieRepository.deleteById(movieId);
     }
 }
