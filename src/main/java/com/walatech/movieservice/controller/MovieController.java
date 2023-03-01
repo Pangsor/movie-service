@@ -24,22 +24,22 @@ public class MovieController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable("id") int movieId){
-        Movie movie = movieService.getMovieById(movieId);
+    public ResponseEntity<MovieDto> getMovieById(@PathVariable("id") int movieId){
+        MovieDto movie = movieService.getMovieById(movieId);
         return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseEntity<List<Movie>> getAllMovies(){
-        List<Movie> movieList = movieService.getAllMovies();
+    public ResponseEntity<List<MovieDto>> getAllMovies(){
+        List<MovieDto> movieList = movieService.getAllMovies();
         return new ResponseEntity<>(movieList, HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable("id") int movieId,
-                                             @RequestBody Movie movie){
+    public ResponseEntity<MovieDto> updateMovie(@PathVariable("id") int movieId,
+                                             @RequestBody MovieDto movie){
         movie.setId(movieId);
-        Movie updatedMovie = movieService.updateMovie(movie);
+        MovieDto updatedMovie = movieService.updateMovie(movie);
         return new ResponseEntity<>(updatedMovie, HttpStatus.OK);
     }
 
