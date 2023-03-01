@@ -4,9 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Setter
@@ -16,9 +15,15 @@ import java.util.Date;
 public class MovieDto {
 
     private int id;
+
+    @NotEmpty(message = "Title should not be null or empty")
     private String title;
+
+    @NotEmpty(message = "Description should not be null or empty")
     private String description;
+
     private float rating;
+
     private String image;
     private Date createdAt;
     private Date updatedAt;

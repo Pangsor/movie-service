@@ -2,6 +2,8 @@ package com.walatech.movieservice.service.impl;
 
 import com.walatech.movieservice.dto.MovieDto;
 import com.walatech.movieservice.entity.Movie;
+import com.walatech.movieservice.exception.ResourceNotFoundException;
+import com.walatech.movieservice.exception.TitleAlreadyExistsException;
 import com.walatech.movieservice.repository.MovieRepository;
 import com.walatech.movieservice.service.MovieService;
 import lombok.AllArgsConstructor;
@@ -21,36 +23,24 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDto createMovie(MovieDto movieDto) {
-//        Movie movie = new Movie(
-//                movieDto.getId(),
-//                movieDto.getTitle(),
-//                movieDto.getDescription(),
-//                movieDto.getRating(),
-//                movieDto.getImage(),
-//                movieDto.getCreatedAt(),
-//                movieDto.getUpdatedAt()
-//        );
 
+        Optional<Movie> optionalMovie = movieRepository.findByTitle(movieDto.getTitle());
+
+        if(optionalMovie.isPresent()){
+            throw new TitleAlreadyExistsException("Title Already Exists for Movie");
+        }
         Movie movie = modelMapper.map(movieDto,Movie.class);
         Movie savedMovie = movieRepository.save(movie);
 
-//        MovieDto savedMovieDto = new MovieDto(
-//                savedMovie.getId(),
-//                savedMovie.getTitle(),
-//                savedMovie.getDescription(),
-//                savedMovie.getRating(),
-//                savedMovie.getImage(),
-//                savedMovie.getCreatedAt(),
-//                savedMovie.getUpdatedAt()
-//        );
         MovieDto savedMovieDto = modelMapper.map(savedMovie,MovieDto.class);
         return savedMovieDto;
     }
 
     @Override
     public MovieDto getMovieById(int movieId) {
-        Optional<Movie> optionalMovie = movieRepository.findById(movieId);
-        Movie movie = optionalMovie.get();
+        Movie movie = movieRepository.findById(movieId).orElseThrow(
+                () -> new ResourceNotFoundException("Movie","id",movieId)
+        );
         return modelMapper.map(movie,MovieDto.class);
     }
 
@@ -63,7 +53,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDto updateMovie(MovieDto movie) {
-        Movie existingMovie = movieRepository.findById(movie.getId()).get();
+        Movie existingMovie = movieRepository.findById(movie.getId()).orElseThrow(
+                () -> new ResourceNotFoundException("Movie","id",movie.getId())
+        );
         existingMovie.setTitle(movie.getTitle());
         existingMovie.setDescription(movie.getDescription());
         existingMovie.setRating(movie.getRating());
@@ -74,6 +66,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteMovie(int movieId) {
+        Movie existingMovie = movieRepository.findById(movieId).orElseThrow(
+                () -> new ResourceNotFoundException("Movie","id",movieId)
+        );
         movieRepository.deleteById(movieId);
     }
 }
